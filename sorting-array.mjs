@@ -1,5 +1,5 @@
 function mergeSort(arr){
-    copyArr = [...arr]
+    let copyArr = [...arr]
     if(copyArr.length === 1){
         return copyArr;
     } else {
@@ -9,8 +9,6 @@ function mergeSort(arr){
         let sortedLeft = mergeSort(leftArr);
         let sortedRight = mergeSort(rightArr);
 
-        console.log(leftArr);
-        console.log(rightArr);
         return merge(sortedLeft, sortedRight);
         
     }
@@ -34,4 +32,14 @@ function merge(left,right) {
     return result.concat(left.slice(leftIndex), right.slice(rightIndex));
 }
 
-export default mergeSort
+function checkDuplicates(sortedArray) {
+    const noDuplicaesArray = []
+    for(let i = 0; i<sortedArray.length; i++) {
+        if (sortedArray[i] === sortedArray[i-1]){
+            console.log(sortedArray[i])
+        } else noDuplicaesArray.push(sortedArray[i])
+    }
+    return noDuplicaesArray;
+}
+
+export {mergeSort, checkDuplicates}
