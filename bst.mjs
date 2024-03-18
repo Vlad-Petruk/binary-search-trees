@@ -89,11 +89,25 @@ function deleteItem(root, value) {
 
 }
 
+function find(root, value) {
+    if (root === null || root.data === value) {
+        return root;
+      }
+
+      // Access root's children if value not found; 
+      if (value < root.data) {
+        return find( root.left, value);
+      }
+      return find( root.right, value); 
+}
+
 const sortedArray = mergeSort([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
 const noDuplicates = checkDuplicates(sortedArray)
 
 const root = buildTree(noDuplicates, 0, noDuplicates.length - 1);
-const deleted = deleteItem(root, 8);
+// const deleted = deleteItem(root, 8);
+const findValue = find(root, 323)
 // console.log(sortedArray);
 // console.log(noDuplicates)
-console.log(deleted);
+// console.log(deleted);
+console.log(findValue)
