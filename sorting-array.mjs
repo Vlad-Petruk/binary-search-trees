@@ -33,13 +33,7 @@ function merge(left,right) {
 }
 
 function checkDuplicates(sortedArray) {
-    const noDuplicaesArray = []
-    for(let i = 0; i<sortedArray.length; i++) {
-        if (sortedArray[i] === sortedArray[i-1]){
-            console.log(sortedArray[i])
-        } else noDuplicaesArray.push(sortedArray[i])
-    }
-    return noDuplicaesArray;
+    return [...new Set(sortedArray)];
 }
 
 export {mergeSort, checkDuplicates}
