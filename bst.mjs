@@ -30,22 +30,70 @@ function buildTree(array, start, end) {
 
 function insert(root, value) {
     if (root == null) {
-        root = new Node(key);
+        root = new Node(value);
         return root;
     }
 
-    if (key < root.value)
+    if (value < root.data)
         root.left = insert(root.left, value);
-    else if (value > root.value)
+    else if (value > root.data)
         root.right = insert(root.right, value);
   
     return root;
 }
 
-let sortedArray = mergeSort([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
-let noDuplicates = checkDuplicates(sortedArray)
+function deleteItem(root, value) {
+    if (root === null) {
+        return root;
+    }
 
-let root = buildTree(noDuplicates, 0, noDuplicates.length - 1)
+    if (root.data > value) {
+        root.left = deleteItem(root.left, value);
+        return root;
+    } else if (root.data < value) {
+        root.right = deleteItem(root.right, value);
+        return root;
+    }
+
+    if (root.left === null) {
+        let temp = root.right;
+        root = null;
+        return temp;
+    } else if (root.right === null) {
+        let temp = root.left;
+        root = null;
+        return temp;
+    }
+
+    else {
+        let succParent = root;
+     
+        let succ = root.right;
+        while (succ.left !== null) {
+          succParent = succ;
+          succ = succ.left;
+        }
+
+        if (succParent !== root) {
+            succParent.left = succ.right;
+          } else {
+            succParent.right = succ.right;
+          }
+       
+          // Copy Successor Data to root
+          root.data = succ.data;
+       
+          succ = null;
+          return root;
+        }
+
+}
+
+const sortedArray = mergeSort([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
+const noDuplicates = checkDuplicates(sortedArray)
+
+const root = buildTree(noDuplicates, 0, noDuplicates.length - 1);
+const deleted = deleteItem(root, 8);
 // console.log(sortedArray);
-console.log(noDuplicates)
-console.log(root)
+// console.log(noDuplicates)
+console.log(deleted);
