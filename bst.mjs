@@ -14,6 +14,7 @@ class Tree {
     }
 }
 
+// Rewrite all this functions into Tree class (using .this in many cases)
 
 function buildTree(array, start, end) {
     if(start > end) {
@@ -101,13 +102,41 @@ function find(root, value) {
       return find( root.right, value); 
 }
 
+function levelOrderIterative(root, callback) {
+    if (!root) return [];
+  
+    const queue = [root];
+    console.log(queue)
+    const result = [];
+  
+    while (queue.length > 0) {
+      const currentNode = queue.shift();
+      result.push(currentNode.data);
+  
+      if (currentNode.left) {
+        queue.push(currentNode.left);
+      }
+      if (currentNode.right) {
+        queue.push(currentNode.right);
+      }
+  
+      if (callback) {
+        callback(currentNode.data);
+      }
+    }
+    return result;
+}  
+
 const sortedArray = mergeSort([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
 const noDuplicates = checkDuplicates(sortedArray)
 
 const root = buildTree(noDuplicates, 0, noDuplicates.length - 1);
 // const deleted = deleteItem(root, 8);
-const findValue = find(root, 323)
+// const findValue = find(root, 323)
+const levelOrder = levelOrderIterative(root)
+
 // console.log(sortedArray);
 // console.log(noDuplicates)
 // console.log(deleted);
-console.log(findValue)
+// console.log(findValue)
+console.log(levelOrder)
