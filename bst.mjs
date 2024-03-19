@@ -1,4 +1,4 @@
-import {mergeSort, checkDuplicates, prettyPrint} from "./sorting-array.mjs";
+import {mergeSort, checkDuplicates} from "./sorting-array.mjs";
 
 class Node {
     constructor (data) {
@@ -10,37 +10,54 @@ class Node {
 
 class Tree {
     constructor(array) {
-        this.root = buildTree(array);
-    }
-}
-
-// Rewrite all this functions into Tree class (using .this in many cases)
-
-function buildTree(array, start, end) {
-    if(start > end) {
-        return null
+        this.root = this.buildTree(array);
     }
 
-    let mid = parseInt((start + end) / 2);
-    let node = new Node(array[mid]);
+    buildTree(array) {
+        if(array.length < 1) {
+            return null
+        }
+    
+        let mid = Math.floor(array.length / 2);
+        let node = new Node(array[mid]);
+    
+        node.left = this.buildTree(array.slice(0, mid));
+        node.right = this.buildTree(array.slice(mid + 1));
+        return node;
+    }
 
-    node.left = buildTree(array, start, mid - 1);
-    node.right = buildTree(array, mid + 1, end);
-    return node;
-}
+    prettyPrint(node = this.root, prefix = "", isLeft = true){
+        if (node === null) {
+          return;
+        }
+        if (node.right !== null) {
+          this.prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false);
+        }
+        console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.data}`);
+        if (node.left !== null) {
+          this.prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
+        }
+    };
 
-function insert(root, value) {
-    if (root == null) {
-        root = new Node(value);
+    insert(value) {
+        this.root = this._insert(this.root, value);
+    }
+    
+    _insert(root, value) {
+        if (root === null) {
+            return new Node(value);
+        }
+    
+        if (value < root.data) {
+            root.left = this._insert(root.left, value);
+        } else if (value > root.data) {
+            root.right = this._insert(root.right, value);
+        }
+    
         return root;
     }
 
-    if (value < root.data)
-        root.left = insert(root.left, value);
-    else if (value > root.data)
-        root.right = insert(root.right, value);
-  
-    return root;
+    
 }
 
 function deleteItem(root, value) {
@@ -130,13 +147,16 @@ function levelOrderIterative(root, callback) {
 const sortedArray = mergeSort([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
 const noDuplicates = checkDuplicates(sortedArray)
 
-const root = buildTree(noDuplicates, 0, noDuplicates.length - 1);
-// const deleted = deleteItem(root, 8);
+const myTree = new Tree(noDuplicates);
+myTree.insert(9)
+// const deleted = myTree.deleteItem(8);
 // const findValue = find(root, 323)
-const levelOrder = levelOrderIterative(root)
+// const levelOrder = levelOrderIterative(root)
+myTree.prettyPrint()
 
 // console.log(sortedArray);
 // console.log(noDuplicates)
+// console.log(inserted)
 // console.log(deleted);
 // console.log(findValue)
-console.log(levelOrder)
+// console.log(myTree)
