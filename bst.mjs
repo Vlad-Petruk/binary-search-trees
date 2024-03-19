@@ -146,7 +146,68 @@ class Tree {
             if (node.right) queue.push(node.right);
           }
         }
-      } 
+    } 
+
+    preOrder(callback) {
+        return this._preOrder(this.root, callback)
+    }
+
+    _preOrder(node, callback) {
+        const result = [];
+        if(!node) return result;
+        if(!callback) {
+            result.push(node.data)
+
+            result.push(...this._preOrder(node.left));
+            result.push(...this._preOrder(node.right));
+
+            return result;
+        } else { 
+            callback(node);
+            this._preOrder(node.left, callback);
+            this._preOrder(node.right, callback);
+        }
+    }
+
+    inOrder(callback) {
+        return this._inOrder(this.root, callback)
+    }
+
+    _inOrder(node, callback) {
+        const result = [];
+        if(!node) return result;
+        if(!callback) {
+            result.push(...this._inOrder(node.left));
+            result.push(node.data)
+            result.push(...this._inOrder(node.right));
+
+            return result;
+        } else { 
+            this._inOrder(node.left, callback);
+            callback(node);
+            this._inOrder(node.right, callback);
+        }
+    }
+
+    postOrder(callback) {
+        return this._postOrder(this.root, callback)
+    }
+
+    _postOrder(node, callback) {
+        const result = [];
+        if(!node) return result;
+        if(!callback) {
+            result.push(...this._postOrder(node.left));
+            result.push(...this._postOrder(node.right));
+            result.push(node.data)
+
+            return result;
+        } else { 
+            this._postOrder(node.left, callback);
+            this._postOrder(node.right, callback);
+            callback(node);
+        }
+    }
 }
 
 
@@ -157,10 +218,12 @@ const myTree = new Tree(noDuplicates);
 myTree.insert(9)
 myTree.deleteItem(8);
 // const findValue = myTree.find(324)
-const levelOrderS = myTree.levelOrder()
+// const levelOrderS = myTree.levelOrder()
+const preorder = myTree.postOrder()
 myTree.prettyPrint()
 
 // console.log(sortedArray);
 // console.log(noDuplicates)
 // console.log(findValue)
-console.log(levelOrderS)
+// console.log(levelOrderS)
+console.log(preorder)
