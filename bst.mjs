@@ -1,5 +1,7 @@
 import {mergeSort, checkDuplicates} from "./sorting-array.mjs";
 
+//Everything in the code after postOrder() isn't my code. Needs rewriting!!!
+
 class Node {
     constructor (data) {
         this.data = data;
@@ -208,22 +210,119 @@ class Tree {
             callback(node);
         }
     }
+
+    height(node) {
+        if (node === null) return -1;
+        const leftHeight = this.height(node.left);
+        const rightHeight = this.height(node.right);
+        return Math.max(leftHeight, rightHeight) + 1;
+    }
+    
+    depth(node) {
+        return this.calculateDepth(this.root, node, 0);
+    }
+    
+    calculateDepth(currentNode, targetNode, depth) {
+        if (currentNode === null) return -1;
+        if (currentNode === targetNode) return depth;
+        const leftDepth = this.calculateDepth(
+          currentNode.left,
+          targetNode,
+          depth + 1
+        );
+        const rightDepth = this.calculateDepth(
+          currentNode.right,
+          targetNode,
+          depth + 1
+        );
+        return Math.max(leftDepth, rightDepth);
+    }
+
+    isBalanced() {
+        return this.checkBalance(this.root) !== -1;
+        }
+
+        checkBalance(node) {
+        if (node === null) return 0;
+
+        const leftHeight = this.checkBalance(node.left);
+        const rightHeight = this.checkBalance(node.right);
+
+        if (
+        leftHeight === -1 ||
+        rightHeight === -1 ||
+        Math.abs(leftHeight - rightHeight) > 1
+        ) {
+        return -1;
+    }
+
+    return Math.max(leftHeight, rightHeight) + 1;
+    }
+    
+    rebalance() {
+        const sortedArray = [];
+        this.inOrder((node) => sortedArray.push(node.data));
+        this.root = this.buildTree(sortedArray);
+    }
 }
 
 
-const sortedArray = mergeSort([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
-const noDuplicates = checkDuplicates(sortedArray)
-
-const myTree = new Tree(noDuplicates);
-myTree.insert(9)
-myTree.deleteItem(8);
-// const findValue = myTree.find(324)
-// const levelOrderS = myTree.levelOrder()
-const preorder = myTree.postOrder()
-myTree.prettyPrint()
-
-// console.log(sortedArray);
-// console.log(noDuplicates)
-// console.log(findValue)
-// console.log(levelOrderS)
-console.log(preorder)
+// Example usage:
+// Function to generate an array of random numbers less than 100
+function generateRandomNumbers(length) {
+    const randomNumbers = [];
+    for (let i = 0; i < length; i++) {
+      randomNumbers.push(Math.floor(Math.random() * 100));
+    }
+    return randomNumbers;
+  }
+  
+  // Create a binary search tree from an array of random numbers
+  const randomNumbers = generateRandomNumbers(15); // Change the length as needed
+  const tree = new Tree(randomNumbers);
+  
+  // Confirm that the tree is balanced
+  console.log("Is the tree balanced?", tree.isBalanced());
+  
+  // Print out all elements in level, pre, post, and in order
+  console.log("\nLevel Order Traversal:");
+  console.log(tree.levelOrder());
+  
+  console.log("\nPre Order Traversal:");
+  tree.preOrder((node) => console.log(node.data));
+  
+  console.log("\nPost Order Traversal:");
+  tree.postOrder((node) => console.log(node.data));
+  
+  console.log("\nIn Order Traversal:");
+  tree.inOrder((node) => console.log(node.data));
+  
+  // Unbalance the tree by adding several numbers > 100
+  tree.insert(150);
+  tree.insert(120);
+  tree.insert(110);
+  
+  // Confirm that the tree is unbalanced
+  console.log(
+    "\nIs the tree balanced after adding numbers > 100?",
+    tree.isBalanced()
+  );
+  
+  // Balance the tree by calling rebalance
+  tree.rebalance();
+  
+  // Confirm that the tree is balanced after rebalancing
+  console.log("\nIs the tree balanced after rebalancing?", tree.isBalanced());
+  
+  // Print out all elements in level, pre, post, and in order after rebalancing
+  console.log("\nLevel Order Traversal after rebalancing:");
+  console.log(tree.levelOrder());
+  
+  console.log("\nPre Order Traversal after rebalancing:");
+  tree.preOrder((node) => console.log(node.data));
+  
+  console.log("\nPost Order Traversal after rebalancing:");
+  tree.postOrder((node) => console.log(node.data));
+  
+  console.log("\nIn Order Traversal after rebalancing:");
+  tree.inOrder((node) => console.log(node.data));
